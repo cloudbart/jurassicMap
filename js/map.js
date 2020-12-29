@@ -44,7 +44,7 @@ function main() {
 
 	const ctx = canvas.getContext("2d");
 	const map_img = new Image();
-	map_img.src = "img/jpmap_img_600x750.png";
+	map_img.src = "img/jpMap_600x750.png";
 	canvas.width = map_img.width;
 	canvas.height = map_img.height;
 
