@@ -1,34 +1,35 @@
 // map.js
 // JavaScript File
+
 // Load the AWS SDK for Node.js
-var AWS = require(['aws-sdk']);
+// var AWS = require(['aws-sdk']);
 // Set the region 
-AWS.config.update({region: 'us-east-1'});
+// AWS.config.update({region: 'us-east-1'});
 
 // Create the DynamoDB service object
-var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+// var ddb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 
-var params = {
-  TableName: 'jurassicMap',
-  Key: {
-    'dinoId': {S: 'raptor1'}
-  }
-};
+// var params = {
+//   TableName: 'jurassicMap',
+//   Key: {
+//     'dinoId': {S: 'raptor1'}
+//   }
+// };
 
 // Call DynamoDB to read the item from the table
-ddb.getItem(params, function(err, data) {
-  if (err) {
-    console.log("Error", err);
-  } else {
-    console.log("Success", data.Item);
-  }
-});
+// ddb.getItem(params, function(err, data) {
+//   if (err) {
+//     console.log("Error", err);
+//   } else {
+//     console.log("Success", data.Item);
+//   }
+// });
 
 
 function drawMarker(x, y, radius, color) {
-	var canvas = document.getElementById('canvas');
-	var context = canvas.getContext('2d');
-
+	const canvas = document.getElementById('map_canvas');
+	const context = canvas.getContext('2d');
+	context.lineWidth = 2;
 	context.beginPath();
 	context.arc(x, y, radius, 0, 2 * Math.PI, false);
 	context.fillStyle = color;
@@ -36,23 +37,26 @@ function drawMarker(x, y, radius, color) {
 }
 
 function main() {
-	var canvas = document.getElementById("canvas");
-	var ctx = canvas.getContext("2d");
-	ctx.lineWidth = 2;
+	const canvas = document.getElementById("map_canvas");
+	const canvasOffset = $("#map_canvas").offset();
+	const offsetX = canvasOffset.left;
+	const offsetY = canvasOffset.top;
 
-	var canvasOffset = $("#canvas").offset();
-	var offsetX = canvasOffset.left;
-	var offsetY = canvasOffset.top;
+	const ctx = canvas.getContext("2d");
+	const map_img = new Image();
+	map_img.src = "img/jpmap_img_600x750.png";
+	canvas.width = map_img.width;
+	canvas.height = map_img.height;
 
-	var background = new Image();
-	background.onload = function() {
-		canvas.width = background.width;
-		canvas.height = background.height;
-		ctx.drawImage(background, 0, 0);
+	map_img.onload = function() {
+		ctx.drawImage(map_img, 0, 0);
+		// Draw markers
+		drawMarker(173, 281, 5, 'red'); // Raptor 1
+		drawMarker(450, 135, 5, 'white'); // Triceratops 1
+		drawMarker(249, 250, 5, 'green'); // Vehicle 1
+		drawMarker(265, 245, 5, 'green'); // Vehicle 2
+	};
 
-	}
-	background.src = "img/jpMap_600x750.png";
-
-	drawMarker(100, 200, 5, 'red'); // Raptor 1
-	drawMarker(300, 325, 5, 'white'); // Triceratops 1
 }
+
+main();
